@@ -1,19 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>入口</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 24px; line-height: 1.6; }
-        .links a { display: inline-block; margin: 8px 0; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正在跳转…</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; padding: 24px; line-height: 1.6; }
+    .links a { display: inline-block; margin: 8px 0; }
+    code { background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; }
+  </style>
 </head>
 <body>
-    <h2>手动跳转</h2>
-    <p>自动跳转已关闭，请手动选择入口：</p>
-    <div class="links">
-        <a href="https://frp-all.com:60903/">进入</a>
-    </div>
+  <h2>正在跳转…</h2>
+  <p>如果没有自动跳转，请点击下面的链接：</p>
+  <div class="links">
+    <a id="redirectLink" href="https://frp-all.com:60903/">打开目标站点</a>
+  </div>
+
+  <p style="color:#666; font-size: 14px;">目标：<code id="targetText">https://frp-all.com:60903/</code></p>
+
+  <script>
+    (function () {
+      // 固定跳转域名与端口（保持不变）
+      const TARGET_ORIGIN = 'https://frp-all.com:60903';
+
+      // 保留用户输入的路径/查询/锚点
+      // 例：11.github.io/mynotes.html -> https://frp-all.com:60903/mynotes.html
+      const path = window.location.pathname || '/';
+      const search = window.location.search || '';
+      const hash = window.location.hash || '';
+      const targetUrl = TARGET_ORIGIN + path + search + hash;
+
+      const link = document.getElementById('redirectLink');
+      const text = document.getElementById('targetText');
+      if (link) link.href = targetUrl;
+      if (text) text.textContent = targetUrl;
+
+      // 防止误在目标站点再次执行导致循环
+      if (window.location.origin === TARGET_ORIGIN) return;
+
+      // replace：不保留当前页面到历史记录，避免返回又触发跳转
+      window.location.replace(targetUrl);
+    })();
+  </script>
 </body>
 </html>
+
